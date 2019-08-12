@@ -1,0 +1,134 @@
+[v-cloak] {
+    display: none;
+}
+
+html,
+body,
+#app {
+    margin: 0;
+    height: 100%;
+}
+
+ul,
+li,
+ol {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #2c3e50;
+    background: linear-gradient(to top, #3498db, #2c3e50);
+}
+
+/* 顶部样式 */
+.top-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: .2rem;
+    background: #1D689F;
+    color: #ffffff;
+    height: 10%;
+}
+
+.top-head-logo {
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+    text-align: left;
+    text-indent: .2rem;
+}
+
+.top-head-title {
+    font-size: .45rem;
+    font-weight: bold;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.top-head-datearea {
+    font-size: .16rem;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+    text-align: right;
+    margin-right: .2rem;
+}
+
+.top-head-datearea>div:first-child {
+    margin: .05rem 0;
+}
+
+/*----中部内容区域------*/
+
+.main-container {
+    /*display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;*/
+    height: 81%;
+    overflow: hidden;
+}
+
+.panel-info {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    color: #ffffff;
+}
+
+.panel-info-header {
+    color: #73B23F;
+    font-size: .35rem;
+    padding: .05rem 0;
+}
+
+/*.panel-info-list*/
+.panel-info-list-item:first-child {
+    background-color: #71B53E;
+    border: .01rem solid #71B53E;
+}
+
+.panel-info-list-item {
+    border: .01rem solid;
+    border-radius: 1rem;
+    margin: .05rem;
+    padding: .03rem 0;
+    display: block;
+}
+.panel-info-list-item:before,.panel-info-list-item:after{
+    content: " ";
+    display: table;
+}
+.panel-info-list-item:after{
+    clear: both;
+}
+
+.panel-info-list-item>span {
+    float: left;
+    width: 50%;
+    font-size: .28rem;
+}
+
+.panel-info-list-item>span:first-child {
+    text-align: right;
+}
+
+.panel-info-list-item>span:last-child {
+    text-align: left;
+}
+
+/* -- 底部内容 -- */
+.bottom-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    color: #18884E;
+    font-size: .26rem;
+    border-radius: 1rem;
+    margin: 0 .1rem;
+    height: 8%;
+}

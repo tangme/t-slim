@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>test</title>
+    <link rel="stylesheet" href="./css/outPatientQueue.min.css">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="top-head">
+            <div class="top-head-logo">爱尔logo</div>
+            <div class="top-head-title">2楼屈光叫号屏</div>
+            <div class="top-head-datearea">
+                <div>{{formatDate}}</div>
+                <div>{{formatTime}}</div>
+            </div>
+        </div>
+        <div class="main-container">
+            <panel-info :data="dataList" title="验光室6" v-for="i in 3"></panel-info>
+        </div>
+        <div class="bottom-footer">
+            温馨提示：请未叫到号码的患者在候诊区耐心等待，谢谢！
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="./js/outPatientQueue.min.js"></script>
+
+<script type="text/javascript">
+! function(e, t) {
+    function n() { t.body ? t.body.style.fontSize = 12 * o + "px" : t.addEventListener("DOMContentLoaded", n) }
+
+    function d() {
+        var e = i.clientWidth / 10;
+        i.style.fontSize = e + "px"
+    }
+    var i = t.documentElement,
+        o = e.devicePixelRatio || 1;
+    if (n(), d(), e.addEventListener("resize", d), e.addEventListener("pageshow", function(e) { e.persisted && d() }), o >= 2) {
+        var a = t.createElement("body"),
+            s = t.createElement("div");
+        s.style.border = ".5px solid transparent", a.appendChild(s), i.appendChild(a), 1 === s.offsetHeight && i.classList.add("hairlines"), i.removeChild(a)
+    }
+}(window, document);
+</script>
+
+</html>

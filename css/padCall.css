@@ -1,0 +1,164 @@
+[v-cloak] {
+    display: none;
+}
+
+html,
+body,
+#app {
+    margin: 0;
+    height: 100%;
+}
+
+/* 顶部样式 */
+.top-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: .2rem;
+    background: #1D689F;
+    color: #ffffff;
+    height: 10%;
+}
+
+.top-head-logo {
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+    text-align: left;
+    text-indent: .2rem;
+}
+
+.top-head-title {
+    font-size: .45rem;
+    font-weight: bold;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.top-head-datearea {
+    font-size: .16rem;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+    text-align: right;
+    margin-right: .2rem;
+}
+
+.top-head-datearea>div:first-child {
+    margin: .05rem 0;
+}
+
+/* 中部内容 */
+.main-info {
+    padding: .15rem .15rem 0;
+    box-sizing: border-box;
+    height: 80%;
+    overflow: hidden;
+}
+
+.info-head,
+.info-item-con {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.info-item-con {
+    height: 100%;
+}
+
+.info-head {
+    height: .6rem;
+    font-size: .3rem;
+    margin-bottom: .02rem;
+}
+
+.info-head-wait {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(36, 128, 211);
+    background: linear-gradient(0deg, rgb(36, 128, 211) 30%, rgb(41, 143, 235) 70%);
+    color: #ffffff;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.info-head-pass {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(20, 161, 173);
+    background: linear-gradient(0deg, rgb(20, 161, 173) 30%, rgb(25, 186, 199) 70%);
+    color: #ffffff;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+/*底部样式*/
+.bottom-info {
+    margin: 0 .15rem;
+    padding-top: 1%;
+    height: 8%;
+}
+
+/* -- others --  */
+.override-van-checkbox__label .van-checkbox__label {
+    width: 100%;
+}
+
+/*------------组件模板样式--------------*/
+.bg-container {
+    position: relative;
+    /*height: calc(100vh - 1.3rem - 50px);*/
+    height: 100%;
+    align-self: start;
+    font-size: .21rem;
+    color: #547690;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: center;
+}
+.cell-height{
+    height: .5rem;
+    line-height: .5rem;
+    font-size:.25rem;
+}
+.bg-container .bgDiv {
+    /*height: .4rem;*/
+    background-color: #E0F0FD;
+}
+
+.bg-container .bgDiv:not(:last-child) {
+    margin-bottom: .02rem;
+}
+
+.bg-container>div.showItem {
+    /*height: .4rem;
+    line-height: .4rem;*/
+}
+
+.bg-container>div.showItem:not(:last-child) {
+    margin-bottom: .02rem;
+}
+
+.bg-container .showItem-span {
+    display: inline-block;
+    width: 3rem;
+}
+
+.bg-item {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background: #fff;
+    overflow: hidden;
+}
+
+.fix-width{
+    width: 1.2rem;
+}
