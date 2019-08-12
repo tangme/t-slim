@@ -28,11 +28,16 @@ gulp.task('babel', () => {
         .pipe(gulp.dest('js/'))
 });
 
-gulp.task("default", gulp.series('autoprefixer','babel',()=>{
-	console.log('autoprefixer and babel task is done.')
-}));
-
 gulp.task('watch',()=>{
 	gulp.watch(['css/**/*.css', '!css/**/*.min.css'],gulp.series('autoprefixer'));
 	gulp.watch(['js/**/*.js', '!js/**/*.min.js'],gulp.series('babel'));
 });
+
+const build = gulp.series('autoprefixer','babel',()=>{
+    return new Promise((resolve,reject)=>{
+        console.log('autoprefixer and babel task is done...');
+        resolve();  
+    })
+});
+
+exports.default = build;
