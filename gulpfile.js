@@ -8,20 +8,20 @@ const uglify = require('gulp-uglify');
 
 
 const paths = {
-    css:{
-        src:['css/**/*.css', '!css/**/*.min.css'],
-        dest:'css/'
+    css: {
+        src: ['css/**/*.css', '!css/**/*.min.css'],
+        dest: 'css/'
     },
-    js:{
-        src:['js/**/*.js', '!js/**/*.min.js'],
-        dest:'js/'
+    js: {
+        src: ['js/**/*.js', '!js/**/*.min.js'],
+        dest: 'js/'
     }
 }
 const watchOption = {
-    events: 'all',  //触发条件 all:[add,addDir,change,unlink,unlinkDir]
-    ignoreInitial: true,//忽略首次启动执行
-    queue: true,   //队列形式执行
-    delay: 200      //延时执行
+    events: 'all', //触发条件 all:[add,addDir,change,unlink,unlinkDir]
+    ignoreInitial: true, //忽略首次启动执行
+    queue: true, //队列形式执行
+    delay: 200 //延时执行
 }
 
 /**
@@ -48,9 +48,19 @@ gulp.task('babel', () => {
     return gulp.src(paths.js.src)
         .pipe(gulp_rename({ suffix: '.min' }))
         .pipe(babel({
-            presets: ['@babel/env']
+            presets: [
+                ['@babel/env', {
+                    "targets": {
+                        "browsers": ["IE >= 9"]
+                    },
+                    "corejs":2,
+                    "useBuiltIns": "usage"//""entry
+                }]
+            ],
+            plugins: ['@babel/transform-runtime'],
+            envName:"production"
         }))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(paths.js.dest))
 });
 
@@ -58,15 +68,15 @@ gulp.task('babel', () => {
  * [监听 js,css文件夹下文件，并在文件被修改后，执行任务]
  * @Author tanglv   2019-08-13
  */
-gulp.task('watch',()=>{
-	gulp.watch(paths.css.src,watchOption,gulp.series('autoprefixer'));
-	gulp.watch(paths.js.src,watchOption,gulp.series('babel'));
+gulp.task('watch', () => {
+    gulp.watch(paths.css.src, watchOption, gulp.series('autoprefixer'));
+    gulp.watch(paths.js.src, watchOption, gulp.series('babel'));
 });
 
-const build = gulp.series('autoprefixer','babel',()=>{
-    return new Promise((resolve,reject)=>{
+const build = gulp.series('autoprefixer', 'babel', () => {
+    return new Promise((resolve, reject) => {
         console.log('autoprefixer and babel task is done...');
-        resolve();  
+        resolve();
     })
 });
 

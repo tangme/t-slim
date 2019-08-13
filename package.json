@@ -8,9 +8,14 @@
   },
   "author": "tanglv",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@babel/runtime": "^7.5.5",
+    "core-js": "^2.6.9"
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
