@@ -1,5 +1,8 @@
 ## 安装
-> npm i --registry=https://registry.npm.taobao.org
+> npm i
+
+## 安装速度慢，可以改为
+> npm i --registry=https://registry.npm.taobao.org 
 
 ## 单次任务构建
 > npx gulp
