@@ -6,6 +6,7 @@ new Vue({
         setInterval(() => {
             this.dateTime = moment().format('ll,dddd LTS');
         }, 1000);
+        this.test();
     },
     computed: {
         formatDate() {
@@ -37,7 +38,14 @@ new Vue({
         }
     },
     methods: {
-
+        test(){
+            return new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    alert('time out');
+                    resolve();
+                },1000);
+            });
+        }
     }
 })
 Vue.component("patient-item", {
