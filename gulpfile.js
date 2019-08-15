@@ -5,6 +5,9 @@ const autoprefixer = require('gulp-autoprefixer');
 const cleanCSS = require('gulp-clean-css');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
+const gulp_changed = require('gulp-changed');
+const gulp_tap = require('gulp-tap');
+
 const source = require('vinyl-source-stream');
 const streamify = require('gulp-streamify');
 const glob = require('glob');
@@ -38,8 +41,9 @@ const watchOption = {
  */
 gulp.task('autoprefixer', () => {
     return gulp.src(paths.css.src)
-        // .pipe(sourcemaps.init())
         .pipe(gulp_rename({ suffix: '.min' }))
+        .pipe(gulp_changed(paths.css.dest))
+        // .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             cascade: true //should Autoprefixer use Visual Cascade, if CSS is uncompressed
         }))
@@ -78,7 +82,7 @@ gulp.task('babel', () => {
  */
 gulp.task('watch', () => {
     gulp.watch(paths.css.src, watchOption, gulp.series('autoprefixer'));
-    gulp.watch(paths.js.src, watchOption, gulp.series('babel'));
+    // gulp.watch(paths.js.src, watchOption, gulp.series('babel'));
 });
 
 
@@ -132,20 +136,20 @@ function test2() {
  * @return {[type]} [description]
  */
 function babelalljs() {
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject) => {
         glob("js/**/*.js", { ignore: ['js/**/*.min.js'] }, (err, files) => {
             let fileArr = [];
             files.forEach(file => {
                 console.log(file)
-                fileArr.push(transformJs(file,paths.js.dest))
+                fileArr.push(transformJs(file, paths.js.dest))
             });
-            Promise.all(fileArr).then(()=>{
+            Promise.all(fileArr).then(() => {
                 console.log('finished.');
                 resolve();
             });
         });
     });
-    
+
 }
 
 /**
@@ -155,7 +159,7 @@ function babelalljs() {
  * @param  {[string]} outputPath [转换后输出的目录]
  * @return {[type]}            [description]
  */
-function transformJs(filePath,outputPath) {
+function transformJs(filePath, outputPath) {
     return new Promise((resolve, reject) => {
         let b = browserify();
         b.add(filePath);
@@ -177,12 +181,42 @@ function transformJs(filePath,outputPath) {
             .pipe(gulp_rename({ suffix: '.min' }))
             .pipe(uglify())
             .pipe(gulp.dest(outputPath));
-            resolve();
+        resolve();
     });
 }
 
 gulp.task(babelalljs)
 
+gulp.task('js', () => {
+    return gulp.src(paths.js.src, { read: false })
+        .pipe(gulp_rename({ suffix: '.min' }))
+        .pipe(gulp_changed(paths.js.dest))
+        .pipe(gulp_tap(function(file) {
+            // replace file contents with browserify's bundle stream
+            file.contents = browserify(file.path, {}).transform("babelify", {
+                presets: [
+                    ["@babel/env", {
+                        "targets": {
+                            "browsers": ["IE >= 9"]
+                        },
+                        "corejs": 2,
+                        "useBuiltIns": "usage" //entry
+                    }]
+                ],
+                plugins: ['@babel/transform-runtime']
+            }).bundle();
+        }))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.js.dest))
+})
+
+gulp.task('watchroot',()=>{
+    gulp.watch("*.html", watchOption, ()=>{
+        console.log('hello');
+        return Promise.resolve();
+    });
+});
 
 
 const build = gulp.series('autoprefixer', 'babelalljs', () => {
