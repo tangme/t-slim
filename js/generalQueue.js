@@ -1,12 +1,37 @@
 var Vue = window.Vue;
-console.log('helle uglify');
+
+Mock.mock('getQueue',{
+    'data':{
+        'wait|1-10':[{
+            'no':function(){return Mock.mock('@integer(1, 100)')},
+            'name':function(){ return Mock.mock('@cname()');}
+        }],
+        'pass|1-10':[{
+            'no':function(){return Mock.mock('@integer(1, 100)')},
+            'name':function(){ return Mock.mock('@cname()');}
+        }],
+        'inQueue|1-10':[{
+            'no':function(){return Mock.mock('@integer(1, 100)')},
+            'name':function(){ return Mock.mock('@cname()');}
+        }]
+    }
+});
+
 new Vue({
     el: '#app',
+    created(){
+        //获取队列
+        axios.get('getQueue').then((res)=>{
+            let { inQueue, pass,wait} = res.data.data;
+            this.waitQueueList = wait; 
+            this.passQueueList = pass;
+            this.inQueueList = inQueue;
+        });
+    },
     mounted() {
         setInterval(() => {
             this.dateTime = moment().format('ll,dddd LTS');
         }, 1000);
-        this.test();
     },
     computed: {
         formatDate() {
@@ -22,30 +47,13 @@ new Vue({
     },
     data: function() {
         return {
-            ws: null,
             dateTime: moment().format('ll,dddd LTS'),
-            tempData: [{
-                name: '1号 王小虎',
-            }, {
-                name: '2号 王小虎',
-            }, {
-                name: '3号 王小虎',
-            }, {
-                name: '4号 王小虎',
-            }, {
-                name: '5号 王小虎',
-            }]
+            waitQueueList:[], 
+            passQueueList:[],
+            inQueueList:[],
         }
     },
     methods: {
-        test(){
-            return new Promise((resolve,reject)=>{
-                setTimeout(()=>{
-                    alert('time out');
-                    resolve();
-                },1000);
-            });
-        }
     }
 })
 Vue.component("patient-item", {
@@ -61,15 +69,21 @@ Vue.component("patient-item", {
     },
     data() {
         return {
-            cc: 'red'
         }
     },
     template: ` <div class="bg-container">
                     <div class="bg-item">
-                        <div class="bgDiv cell-height" v-for="i in 20" v-bind:style="{backgroundColor:bgcolor}"></div>
+                        <div class="bgDiv cell-height" v-for="i in 20" v-once v-bind:style="{backgroundColor:bgcolor}"></div>
                     </div>
                     <div v-for="i in data" class="showItem cell-height">
-                        <span class="showItem-span">{{i.name}}</span>
+                        <span class="showItem-span">
+                            <span class="showItem-span-left">
+                                {{i.no}}号
+                            </span>
+                            <span class="showItem-span-right">
+                                {{i.name}}
+                            </span>
+                        </span>
                     </div>
                 </div>`
 });

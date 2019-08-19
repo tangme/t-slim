@@ -151,6 +151,22 @@ body,
     width: 3rem;
 }
 
+.bg-container .showItem-span-left{
+    float: left;
+    width: 50%;
+    text-align: right;
+}
+.bg-container .showItem-span-left:after{
+    content: " ";
+    width: 0.05rem;
+    display: inline-block;
+}
+.bg-container .showItem-span-right{
+    float: left;
+    width: 50%;
+    text-align: left;
+}
+
 .bg-item {
     position: absolute;
     height: 100%;

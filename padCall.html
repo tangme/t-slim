@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
 
     <title>test</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.0/lib/index.css">
+    <link rel="stylesheet" href="./lib/index.css">
     <link rel="stylesheet" href="./css/padCall.min.css">
-    <script src="http://10.203.2.187:1337/vorlon.max.js"></script>
+    <!-- <script src="http://10.203.2.187:1337/vorlon.max.js"></script> -->
 </head>
 
 <body>
@@ -31,11 +31,11 @@
                 <div class="info-head-pass">候诊患者</div>
             </div>
             <div class="info-item-con">
-                <patient-item :data="tempData" bgcolor="#E0F0FD"></patient-item>
+                <patient-item :data="waitQueueList" bgcolor="#E0F0FD"></patient-item>
                 <div style="width: .02rem;"></div>
-                <patient-item :data="tempData" bgcolor="#D6EFF4"></patient-item>
+                <patient-item :data="passQueueList" bgcolor="#D6EFF4"></patient-item>
                 <div style="width: .02rem;"></div>
-                <patient-item :data="tempData" bgcolor="#D6EFF4">
+                <patient-item :data="inQueueList" bgcolor="#D6EFF4">
                     <van-button icon="edit" size="small" style="vertical-align: middle;" round @click="showPopup"></van-button>
                 </patient-item>
             </div>
@@ -43,7 +43,7 @@
         <div class="bottom-info">
             <van-button type="primary" style="width: 100%;" size="large" @click="callNext">下一位</van-button>
         </div>
-        <van-popup v-model="show" position="bottom">
+        <van-popup v-model="showResult" position="bottom">
             <van-row>
                 <van-col span="8">
                     <van-panel title="右眼结果">
@@ -77,7 +77,7 @@
                 </van-col>
                 <van-col span="8">
                     <van-panel title="费用">
-                        <van-checkbox-group v-model="cost">
+                        <van-checkbox-group v-model="form.cost">
                             <van-cell-group>
                                 <van-cell clickable value-class="override-van-checkbox__label" key="all" @click="toggleAll">
                                     <van-checkbox ref="checkboxAll" icon-size="24px" name="all">
@@ -97,22 +97,38 @@
                                 </van-cell>
                             </van-cell-group>
                         </van-checkbox-group>
-                        <div slot="footer" style="text-align: right;">
+                        <!-- <div slot="footer" style="text-align: right;">
                             <van-button size="small" type="primary" @click="handleSave">保存</van-button>
-                        </div>
+                        </div> -->
                     </van-panel>
+                </van-col>
+            </van-row>
+            <br>
+            <van-row>
+                <van-col span="24">
+                    <van-button style="width: 100%;" size="normal" type="primary" @click="handleSave">保存</van-button>
                 </van-col>
             </van-row>
         </van-popup>
         <van-popup v-model="showPicker" position="right" :style="{ height: '100%',width:'20%' }" >
             <van-picker :columns="columns" show-toolbar @cancel="showPicker = false" @confirm="onConfirm" visible-item-count="15"></van-picker>
         </van-popup>
+        <van-popup v-model="showBtn" style="width: 50%;height: 25%;padding: .02rem;">
+            <div class="flex-center fs-04 white" style="height: 100%;">
+                <div class="flex-item-center h-100p bg-green mr-02" @click="handleCallin">就诊</div>
+                <div class="flex-item-center h-100p bg-blue mr-02" @click="handleRecall">重叫</div>
+                <div class="flex-item-center h-100p bg-yellow" @click="handlePass">过号</div>
+            </div>
+        </van-popup>
     </div>
 </body>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vant@2.0/lib/vant.min.js"></script>
+<script src="./lib/polyfill.min.js"></script>
+<script src="./lib/mock-min.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./lib/moment.min.js"></script>
+<script src="./lib//zh-cn.js"></script>
+<script src="./lib/vue.min.js"></script>
+<script src="./lib/vant.min.js"></script>
 <script src="./js/padCall.min.js"></script>
 <script type="text/javascript">
 ! function(e, t) {

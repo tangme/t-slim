@@ -98,6 +98,40 @@ body,
     height: 100%;
 }
 
+.flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex-item-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+.h-100p{
+    height: 100%;
+}
+.white{
+    color: #ffffff;
+}
+.bg-green{
+    background-color: #07c160;
+}
+.bg-blue{
+    background-color: #1989fa;
+}
+.bg-yellow{
+    background-color: #ff976a;
+}
+.fs-04{
+    font-size: .4rem;
+}
+.mr-02{
+    margin-right: .02rem; 
+}
+
 /*底部样式*/
 .bottom-info {
     margin: 0 .15rem;
@@ -148,6 +182,21 @@ body,
 .bg-container .showItem-span {
     display: inline-block;
     width: 3rem;
+}
+.bg-container .showItem-span-left{
+    float: left;
+    width: 50%;
+    text-align: right;
+}
+.bg-container .showItem-span-left:after{
+    content: " ";
+    width: 0.05rem;
+    display: inline-block;
+}
+.bg-container .showItem-span-right{
+    float: left;
+    width: 50%;
+    text-align: left;
 }
 
 .bg-item {

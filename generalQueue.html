@@ -28,11 +28,11 @@
                 <div class="info-head-pass">过号患者</div>
             </div>
             <div class="info-item-con">
-                <patient-item :data="[{name: '4号 王小虎'}]" bgcolor="#D6EFF4"></patient-item>
+                <patient-item :data="inQueueList" bgcolor="#D6EFF4"></patient-item>
                 <div style="width: .02rem;"></div>
-                <patient-item :data="tempData" bgcolor="#E0F0FD"></patient-item>
+                <patient-item :data="waitQueueList" bgcolor="#E0F0FD"></patient-item>
                 <div style="width: .02rem;"></div>
-                <patient-item :data="tempData" bgcolor="#D6EFF4"></patient-item>
+                <patient-item :data="passQueueList" bgcolor="#D6EFF4"></patient-item>
             </div>
         </div>
         <div class="bottom-info">
@@ -40,9 +40,12 @@
         </div>
     </div>
 </body>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="./lib/polyfill.min.js"></script>
+<script src="./lib/mock-min.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./lib/moment.min.js"></script>
+<script src="./lib//zh-cn.js"></script>
+<script src="./lib/vue.min.js"></script>
 <script src="./js/generalQueue.min.js"></script>
 <script type="text/javascript">
 ! function(e, t) {

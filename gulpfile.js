@@ -82,7 +82,7 @@ gulp.task('babel', () => {
  */
 gulp.task('watch', () => {
     gulp.watch(paths.css.src, watchOption, gulp.series('autoprefixer'));
-    // gulp.watch(paths.js.src, watchOption, gulp.series('babel'));
+    gulp.watch(paths.js.src, watchOption, gulp.series('babelalljs'));
 });
 
 
@@ -169,17 +169,17 @@ function transformJs(filePath, outputPath) {
                     "targets": {
                         "browsers": ["IE >= 9"]
                     },
-                    "corejs": 2,
-                    "useBuiltIns": "usage" //entry
+                    // "corejs": 2,
+                    // "useBuiltIns": "usage" //entry
                 }]
             ],
-            plugins: ['@babel/transform-runtime']
+            // plugins: ['@babel/transform-runtime']
         })
         b.bundle()
             .pipe(source(path.parse(filePath).base))
             .pipe(buffer())
             .pipe(gulp_rename({ suffix: '.min' }))
-            .pipe(uglify())
+            // .pipe(uglify())
             .pipe(gulp.dest(outputPath));
         resolve();
     });
@@ -196,18 +196,18 @@ gulp.task('js', () => {
             file.contents = browserify(file.path, {}).transform("babelify", {
                 presets: [
                     ["@babel/env", {
-                        "targets": {
-                            "browsers": ["IE >= 9"]
-                        },
-                        "corejs": 2,
-                        "useBuiltIns": "usage" //entry
+                        // "targets": {
+                        //     "browsers": ["IE >= 9"]
+                        // },
+                        // "corejs": 2,
+                        // "useBuiltIns": "usage" //entry
                     }]
                 ],
-                plugins: ['@babel/transform-runtime']
+                // plugins: ['@babel/transform-runtime']
             }).bundle();
         }))
         .pipe(buffer())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(paths.js.dest))
 })
 
