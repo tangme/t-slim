@@ -20,17 +20,34 @@
                 <div>{{formatTime}}</div>
             </div>
         </div>
-        <div class="main-container">
-            <panel-info :data="dataList" title="验光室6" v-for="i in 8"></panel-info>
+        <div class="main-container" ref="maincontainer" style="white-space: nowrap;overflow-x: hidden;position: relative;z-index: 100;">
+            <div v-for="(i,index) in Math.ceil(roomList.length/8)" style="height: 100%;width: 100%;display: inline-block;white-space: normal;    vertical-align: top;">
+                <template v-for="(item,itemindex) in roomList">
+                    <template v-if=" itemindex>= index*8 && itemindex<i*8">
+                        <panel-info :data="item.waiterList" :title="item.roomName"></panel-info>
+                    </template>
+                </template>
+                <!-- <panel-info :data="dataList" title="验光室6" v-for="i in 8"></panel-info> -->
+            </div>
+
+            <!-- <div style="height: 100%;width: 100%;display: inline-block;white-space: normal;">
+                <panel-info :data="dataList" title="验光室6" v-for="i in 8"></panel-info>
+            </div>
+            <div style="height: 100%;width: 100%;display: inline-block;white-space: normal;">
+                <panel-info :data="dataList" title="验光室6" v-for="i in 8"></panel-info>
+            </div> -->
         </div>
         <div class="bottom-footer">
             温馨提示：请未叫到号码的患者在候诊区耐心等待，谢谢！
         </div>
     </div>
 </body>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="./lib/polyfill.min.js"></script>
+<script src="./lib/mock-min.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./lib/moment.min.js"></script>
+<script src="./lib//zh-cn.js"></script>
+<script src="./lib/vue.min.js"></script>
 <script src="./js/optometryQueue.min.js"></script>
 
 <script type="text/javascript">

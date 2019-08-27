@@ -41,7 +41,7 @@ body {
 }
 
 .top-head-title {
-    font-size: .45rem;
+    font-size: .4rem;
     font-weight: bold;
     flex-grow: 1;
     flex-shrink: 0;
@@ -64,27 +64,55 @@ body {
 /*----中部内容区域------*/
 
 .main-container {
-    display: flex;
+    /*display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-content: flex-start;
+    align-content: flex-start;*/
     height: 81%;
     overflow: hidden;
 }
 
 .panel-info {
     width: 33%;
+    height: 100%;
+    overflow: hidden;
+    display: inline-block;
     text-align: center;
+    vertical-align: top;
     color: #ffffff;
 }
 
 .panel-info-header {
-    color: #73B23F;
-    font-size: .35rem;
+    color: #d9ce17;
+    font-size: .33rem;
     padding: .05rem 0;
 }
 
-/*.panel-info-list*/
+.panel-info-list{
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.panel-info-list-bg{
+    position: absolute;
+    top:0;
+    width: 100%;
+    height: 100%;
+    margin-top: -.05rem;
+}
+
+.panel-info-list-bg-item{
+    border: .01rem solid;
+    border-radius: 1rem;
+    margin: .05rem;
+    padding: .03rem 0;
+}
+.panel-info-list-bg-item-span{
+    /*font-size: .28rem;*/
+    visibility: hidden;
+}
+
 .panel-info-list-item:first-child {
     background-color: #71B53E;
     border: .01rem solid #71B53E;
@@ -108,7 +136,7 @@ body {
 .panel-info-list-item>span {
     float: left;
     width: 50%;
-    font-size: .28rem;
+    /*font-size: .28rem;*/
 }
 
 .panel-info-list-item>span:first-child {
@@ -117,6 +145,10 @@ body {
 
 .panel-info-list-item>span:last-child {
     text-align: left;
+}
+
+.text-show-font{
+    font-size: .25rem;
 }
 
 /* -- 底部内容 -- */

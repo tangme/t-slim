@@ -20,16 +20,19 @@
             </div>
         </div>
         <div class="main-container">
-            <panel-info :data="dataList" title="验光室6" v-for="i in 3"></panel-info>
+            <panel-info v-for="item in dataList" :data="item.waiterList" :title="item.roomName" ></panel-info>
         </div>
         <div class="bottom-footer">
             温馨提示：请未叫到号码的患者在候诊区耐心等待，谢谢！
         </div>
     </div>
 </body>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="./lib/polyfill.min.js"></script>
+<script src="./lib/mock-min.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./lib/moment.min.js"></script>
+<script src="./lib//zh-cn.js"></script>
+<script src="./lib/vue.min.js"></script>
 <script src="./js/outPatientQueue.min.js"></script>
 
 <script type="text/javascript">

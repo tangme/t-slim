@@ -75,3 +75,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+css/*.min.css
+js/*.min.js

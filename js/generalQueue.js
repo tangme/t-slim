@@ -1,8 +1,8 @@
 var Vue = window.Vue;
 
-Mock.mock('getQueue',{
+Mock.mock('getQueue',{ 
     'data':{
-        'wait|1-10':[{
+        'wait|1-20':[{
             'no':function(){return Mock.mock('@integer(1, 100)')},
             'name':function(){ return Mock.mock('@cname()');}
         }],
@@ -10,7 +10,7 @@ Mock.mock('getQueue',{
             'no':function(){return Mock.mock('@integer(1, 100)')},
             'name':function(){ return Mock.mock('@cname()');}
         }],
-        'inQueue|1-10':[{
+        'inQueue|1-5':[{
             'no':function(){return Mock.mock('@integer(1, 100)')},
             'name':function(){ return Mock.mock('@cname()');}
         }]

@@ -27,6 +27,9 @@ Mock.mock('getQueue',{
         }]
     }
 });
+Mock.mock('fetch',{
+    'data':'success'
+})
 
 
 new Vue({
@@ -99,7 +102,12 @@ new Vue({
          * @return {[type]} [description]
          */
         handleCallin() {
-            vant.Toast('提示1');
+            axios.get('fetch').then((res)=>{
+                this.showBtn = false;
+            }).catch(err=>{
+                vant.Toast.fail('就诊请求错误');
+            });
+            // vant.Toast('提示1');
         },
         /**
          * [handleRecall 重叫按钮]
@@ -107,7 +115,11 @@ new Vue({
          * @return {[type]} [description]
          */
         handleRecall() {
-            vant.Toast('提示2');
+            axios.get('fetch').then((res)=>{
+                vant.Toast.success("正在重叫");
+            }).catch(err=>{
+                vant.Toast.fail('就诊请求错误');
+            });
         },
         /**
          * [handlePass 过号按钮]
@@ -115,7 +127,11 @@ new Vue({
          * @return {[type]} [description]
          */
         handlePass() {
-            vant.Toast('提示3');
+            axios.get('fetch').then((res)=>{
+                this.showBtn = false;
+            }).catch(err=>{
+                vant.Toast.fail('过号请求错误');
+            });
         },
         /**
          * [callNext 下一位按钮按钮事件]
