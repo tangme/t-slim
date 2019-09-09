@@ -132,6 +132,14 @@ body,
     margin-right: .02rem; 
 }
 
+.operate-title{
+    display: flex;
+    align-items: center;
+    height: 20%;
+    font-size: .2rem;
+    text-indent: .2rem;
+}
+
 /*底部样式*/
 .bottom-info {
     margin: 0 .15rem;

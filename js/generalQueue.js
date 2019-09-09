@@ -45,15 +45,39 @@ new Vue({
             }
         }
     },
+    watch:{
+        inQueueList(val){
+            if(!this.callingFlag && this.inQueueList.length>0){
+                console.log('watch');
+                this.callName();
+            }
+        }
+    },
     data: function() {
         return {
             dateTime: moment().format('ll,dddd LTS'),
             waitQueueList:[], 
             passQueueList:[],
             inQueueList:[],
+            callingFlag:false,//正在播放标示
         }
     },
     methods: {
+        callName(){
+            this.callingFlag = true;
+            if(this.inQueueList.length > 0){
+                var name = this.inQueueList[0].name;
+                this.inQueueList[0].focus = true;
+                console.log({name});
+                setTimeout(()=>{
+                    this.inQueueList.shift();
+                    this.callName();
+                },3000);
+            }else{
+                this.callingFlag = false;
+                console.log('end...');
+            }
+        }
     }
 })
 Vue.component("patient-item", {

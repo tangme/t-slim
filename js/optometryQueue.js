@@ -1,5 +1,14 @@
 var Vue = window.Vue;
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.transformRequest = [function (data) {
+    let ret = ''
+    for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+    }
+    return ret
+}]
+
 var test = Mock.mock({
     'roomList|1-12':[{
         'no':function(){return Mock.mock('@integer(1, 100)')},

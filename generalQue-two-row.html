@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>test</title>
-    <link rel="stylesheet" href="./css/generalQue-two-row.css">
+    <link rel="stylesheet" href="./css/generalQue-two-row.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
             </div>
             <div v-for="i in inQueueList" class="calling-info-item">
                 <div class="display-table h-100p">
-                    <div class="calling-info-item-text">{{i.no}}号 {{i.name}}</div>
+                    <div class="calling-info-item-text" :class="{animated:i.focus, infinite:i.focus, heartBeat:i.focus}">{{i.no}}号 {{i.name}}</div>
                 </div>
             </div>
         </div>

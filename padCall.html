@@ -113,8 +113,9 @@
         <van-popup v-model="showPicker" position="right" :style="{ height: '100%',width:'20%' }" >
             <van-picker :columns="columns" show-toolbar @cancel="showPicker = false" @confirm="onConfirm" visible-item-count="15"></van-picker>
         </van-popup>
-        <van-popup v-model="showBtn" :close-on-click-overlay="false" style="width: 50%;height: 25%;padding: .02rem;">
-            <div class="flex-center fs-04 white" style="height: 100%;">
+        <van-popup v-model="showBtn" :close-on-click-overlay="false" style="width: 40%;height: 25%;padding: .02rem;">
+            <div class="operate-title">{{operateTitle}}</div>
+            <div class="flex-center fs-04 white" style="height: 80%;">
                 <div class="flex-item-center h-100p bg-green mr-02" @click="handleCallin">就诊</div>
                 <div class="flex-item-center h-100p bg-blue mr-02" @click="handleRecall">重叫</div>
                 <div class="flex-item-center h-100p bg-yellow" @click="handlePass">过号</div>

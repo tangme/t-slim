@@ -92,7 +92,8 @@ new Vue({
             resetForm:{},
             costList: [],//检查结果弹窗里 费用列表
             columns: ['0.08', '0.06', '0.04', '0.02', '2.0', '1.5', '1.2', '1.0', '0.8', '0.6', '0.5', '0.4', '0.3', '0.25', '0.2', '0.15', '0.12', '0.1'],
-            currentPickerField: ''
+            currentPickerField: '',
+            operateTitle:''//操作弹窗的标题名称 e.g: 13号 张三
         }
     },
     methods: {
@@ -141,6 +142,7 @@ new Vue({
         callNext() {
             // vant.Toast('提示');
             this.showBtn = true;
+            this.operateTitle = '13号 张三';
         },
         /**
          * [showPopup 显示结果费用弹窗]
