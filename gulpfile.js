@@ -7,6 +7,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const gulp_changed = require('gulp-changed');
 const gulp_tap = require('gulp-tap');
+const gulp_if = require('gulp-if');
 
 const source = require('vinyl-source-stream');
 const streamify = require('gulp-streamify');
@@ -14,8 +15,28 @@ const glob = require('glob');
 const buffer = require('vinyl-buffer')
 const path = require('path');
 
+
+const minimist = require('minimist'); //解析命令行参数
+const buildOptions = require('minimist-options'); //解析命令行参数 增强配置
+
 var fs = require("fs");
 var browserify = require("browserify");
+
+var knownOptions = buildOptions({
+    //生成环境进行文件压缩
+    env: {
+        type: 'string',
+        default: process.env.NODE_ENV || 'production'
+    },
+    onlychange: {//只针对改动文件执行任务
+        type: 'boolean',
+        alias: 'oc',
+        default: true
+    },
+});
+
+var options = minimist(process.argv.slice(2), knownOptions);
+console.log(options);
 
 
 const paths = {
@@ -42,13 +63,11 @@ const watchOption = {
 gulp.task('autoprefixer', () => {
     return gulp.src(paths.css.src)
         .pipe(gulp_rename({ suffix: '.min' }))
-        .pipe(gulp_changed(paths.css.dest))
-        // .pipe(sourcemaps.init())
+        .pipe(gulp_if(options.onlychange,gulp_changed(paths.css.dest)))
         .pipe(autoprefixer({
             cascade: true //should Autoprefixer use Visual Cascade, if CSS is uncompressed
         }))
-        .pipe(cleanCSS())
-        // .pipe(sourcemaps.write())
+        .pipe(gulp_if(options.env==='production',cleanCSS()))
         .pipe(gulp.dest(paths.css.dest))
 });
 
@@ -189,16 +208,16 @@ gulp.task(babelalljs)
 
 gulp.task('js', () => {
     return gulp.src(paths.js.src, { read: false })
-        .pipe(gulp_rename({ suffix: '.min' }))
-        .pipe(gulp_changed(paths.js.dest))
+        .pipe(gulp_if(options.onlychange,gulp_rename({ suffix: '.min' })))
+        .pipe(gulp_if(options.onlychange,gulp_changed(paths.js.dest)))
         .pipe(gulp_tap(function(file) {
             // replace file contents with browserify's bundle stream
             file.contents = browserify(file.path, {}).transform("babelify", {
                 presets: [
                     ["@babel/env", {
-                        // "targets": {
-                        //     "browsers": ["IE >= 9"]
-                        // },
+                        "targets": {
+                            "browsers": ["IE >= 9"]
+                        },
                         // "corejs": 2,
                         // "useBuiltIns": "usage" //entry
                     }]
@@ -207,19 +226,20 @@ gulp.task('js', () => {
             }).bundle();
         }))
         .pipe(buffer())
-        // .pipe(uglify())
+        .pipe(gulp_if(options.env==='production',uglify()))
+        .pipe(gulp_if(!options.onlychange,gulp_rename({ suffix: '.min' })))
         .pipe(gulp.dest(paths.js.dest))
 })
 
-gulp.task('watchroot',()=>{
-    gulp.watch("*.html", watchOption, ()=>{
+gulp.task('watchroot', () => {
+    gulp.watch("*.html", watchOption, () => {
         console.log('hello');
         return Promise.resolve();
     });
 });
 
 
-const build = gulp.series('autoprefixer', 'babelalljs', () => {
+const build = gulp.series('autoprefixer', 'js', () => {
     return new Promise((resolve, reject) => {
         console.log('autoprefixer and babel task is done...');
         resolve();
