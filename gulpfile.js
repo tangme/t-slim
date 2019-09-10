@@ -212,7 +212,7 @@ gulp.task('js', () => {
         .pipe(gulp_if(options.onlychange,gulp_changed(paths.js.dest)))
         .pipe(gulp_tap(function(file) {
             // replace file contents with browserify's bundle stream
-            file.contents = browserify(file.path, {}).transform("babelify", {
+            file.contents = browserify(file.path.replace('.min',''), {}).transform("babelify", {
                 presets: [
                     ["@babel/env", {
                         "targets": {
