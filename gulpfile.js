@@ -8,6 +8,7 @@ const uglify = require('gulp-uglify');
 const gulp_changed = require('gulp-changed');
 const gulp_tap = require('gulp-tap');
 const gulp_if = require('gulp-if');
+const gulp_eslint = require('gulp-eslint');
 
 const source = require('vinyl-source-stream');
 const streamify = require('gulp-streamify');
@@ -28,16 +29,23 @@ var knownOptions = buildOptions({
         type: 'string',
         default: process.env.NODE_ENV || 'production'
     },
-    onlychange: {//只针对改动文件执行任务
+    onlychange: { //只针对改动文件执行任务
         type: 'boolean',
         alias: 'oc',
         default: true
     },
+    lint: {
+        type: 'boolean',
+        default: true
+    }
 });
 
 var options = minimist(process.argv.slice(2), knownOptions);
 console.log(options);
 
+function isFixed(file) {
+    return file.eslint != null && file.eslint.fixed;
+}
 
 const paths = {
     css: {
@@ -63,11 +71,11 @@ const watchOption = {
 gulp.task('autoprefixer', () => {
     return gulp.src(paths.css.src)
         .pipe(gulp_rename({ suffix: '.min' }))
-        .pipe(gulp_if(options.onlychange,gulp_changed(paths.css.dest)))
+        .pipe(gulp_if(options.onlychange, gulp_changed(paths.css.dest)))
         .pipe(autoprefixer({
             cascade: true //should Autoprefixer use Visual Cascade, if CSS is uncompressed
         }))
-        .pipe(gulp_if(options.env==='production',cleanCSS()))
+        .pipe(gulp_if(options.env === 'production', cleanCSS()))
         .pipe(gulp.dest(paths.css.dest))
 });
 
@@ -207,12 +215,26 @@ function transformJs(filePath, outputPath) {
 gulp.task(babelalljs)
 
 gulp.task('js', () => {
-    return gulp.src(paths.js.src, { read: false })
-        .pipe(gulp_if(options.onlychange,gulp_rename({ suffix: '.min' })))
-        .pipe(gulp_if(options.onlychange,gulp_changed(paths.js.dest)))
-        .pipe(gulp_tap(function(file) {
+    return gulp.src(paths.js.src) //, { read: false }
+        .pipe(gulp_if(options.onlychange, gulp_rename({ suffix: '.min' }))) //仅修改时，先改变文件名
+        .pipe(gulp_if(options.onlychange, gulp_changed(paths.js.dest)))
+        .pipe(gulp_if(options.lint,gulp_eslint({
+            configFile: '.eslintrc.js', //eslint 规则配置文件
+            fix: true //自动修复可处理的错误
+        })))
+        // .pipe(gulp_eslint.format())//Format all results at once, at the end
+        .pipe(gulp_if(options.lint,gulp_eslint.formatEach())) //format one at time since this stream may fail before it can format them all at the end
+        .pipe(gulp_if(options.lint,gulp_eslint.failOnError())) //failOnError will emit an error (fail) immediately upon the first file that has an error
+        .on('error', error => {
+            console.log('Stream Exiting With Error: ' + error.message);
+        })
+        .pipe(gulp_if(options.onlychange, gulp_rename(function(path) { //仅修改时，改回文件 原本名字
+            path.basename = path.basename.replace('.min', '')
+        })))
+        .pipe(gulp_if(options.lint,gulp_if(isFixed, gulp.dest(paths.js.dest)))) //将修复后的文件，覆盖原有文件
+        .pipe(gulp_tap(function(file) { //针对每个文件进行babel处理
             // replace file contents with browserify's bundle stream
-            file.contents = browserify(file.path.replace('.min',''), {}).transform("babelify", {
+            file.contents = browserify(file.path, {}).transform("babelify", {
                 presets: [
                     ["@babel/env", {
                         "targets": {
@@ -225,10 +247,32 @@ gulp.task('js', () => {
                 // plugins: ['@babel/transform-runtime']
             }).bundle();
         }))
-        .pipe(buffer())
-        .pipe(gulp_if(options.env==='production',uglify()))
-        .pipe(gulp_if(!options.onlychange,gulp_rename({ suffix: '.min' })))
+        .pipe(buffer()) //transform streaming contents into buffer contents
+        .pipe(gulp_if(options.env === 'production', uglify())) //生产环境，进行压缩
+        .pipe(gulp_rename({ suffix: '.min' })) //将bebel后的内容，重命名.min后输出
         .pipe(gulp.dest(paths.js.dest))
+
+    // .pipe(gulp_eslint.failAfterError())
+    /*.pipe(gulp_tap(function(file) {
+        console.log(`file:${file.path}`);
+        // replace file contents with browserify's bundle stream
+        file.contents = browserify(file.path.replace('.min',''), {}).transform("babelify", {
+            presets: [
+                ["@babel/env", {
+                    "targets": {
+                        "browsers": ["IE >= 9"]
+                    },
+                    // "corejs": 2,
+                    // "useBuiltIns": "usage" //entry
+                }]
+            ],
+            // plugins: ['@babel/transform-runtime']
+        }).bundle();
+    }))
+    .pipe(buffer())
+    .pipe(gulp_if(options.env==='production',uglify()))
+    .pipe(gulp_if(!options.onlychange,gulp_rename({ suffix: '.min' })))
+    .pipe(gulp.dest(paths.js.dest))*/
 })
 
 gulp.task('watchroot', () => {
