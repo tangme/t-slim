@@ -9,6 +9,8 @@ const gulp_changed = require('gulp-changed');
 const gulp_tap = require('gulp-tap');
 const gulp_if = require('gulp-if');
 const gulp_eslint = require('gulp-eslint');
+const gulp_csslint = require("gulp-csslint");
+gulp_csslint.addFormatter('csslint-stylish');
 
 const source = require('vinyl-source-stream');
 const streamify = require('gulp-streamify');
@@ -72,6 +74,9 @@ gulp.task('autoprefixer', () => {
     return gulp.src(paths.css.src)
         .pipe(gulp_rename({ suffix: '.min' }))
         .pipe(gulp_if(options.onlychange, gulp_changed(paths.css.dest)))
+        .pipe(gulp_csslint())
+        .pipe(gulp_csslint.formatter('stylish'))
+        // .pipe(gulp_csslint.formatter('fail'))
         .pipe(autoprefixer({
             cascade: true //should Autoprefixer use Visual Cascade, if CSS is uncompressed
         }))
