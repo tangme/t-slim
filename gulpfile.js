@@ -26,8 +26,7 @@ var fs = require("fs");
 var browserify = require("browserify");
 
 var knownOptions = buildOptions({
-    //生成环境进行文件压缩
-    env: {
+    env: {//生产环境进行文件压缩
         type: 'string',
         default: process.env.NODE_ENV || 'production'
     },
@@ -36,7 +35,7 @@ var knownOptions = buildOptions({
         alias: 'oc',
         default: true
     },
-    lint: {
+    lint: {//语法校验
         type: 'boolean',
         default: true
     }
@@ -114,7 +113,7 @@ gulp.task('babel', () => {
  */
 gulp.task('watch', () => {
     gulp.watch(paths.css.src, watchOption, gulp.series('autoprefixer'));
-    gulp.watch(paths.js.src, watchOption, gulp.series('babelalljs'));
+    gulp.watch(paths.js.src, watchOption, gulp.series('js'));
 });
 
 
@@ -232,6 +231,7 @@ gulp.task('js', () => {
         .pipe(gulp_if(options.lint,gulp_eslint.failOnError())) //failOnError will emit an error (fail) immediately upon the first file that has an error
         .on('error', error => {
             console.log('Stream Exiting With Error: ' + error.message);
+            this.emit('end');
         })
         .pipe(gulp_if(options.onlychange, gulp_rename(function(path) { //仅修改时，改回文件 原本名字
             path.basename = path.basename.replace('.min', '')

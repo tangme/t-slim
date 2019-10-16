@@ -5,18 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
-
-    <title>test</title>
-    <link rel="stylesheet" href="./lib/index.css">
-    <link rel="stylesheet" href="./css/padCall.min.css">
-    <!-- <script src="http://10.203.2.187:1337/vorlon.max.js"></script> -->
+    <title>PAD叫号</title>
+    <link rel="stylesheet" href="${base}/static/lib/vant.css">
+    <link rel="stylesheet" href="${base}/static/css/screen/padCall.min.css>
 </head>
 
 <body>
     <div id="app" v-cloak>
         <div class="top-head">
             <div class="top-head-logo">爱尔logo</div>
-            <div class="top-head-title">普查区</div>
+            <div class="top-head-title">PAD叫号</div>
             <div class="top-head-datearea">
                 <div>{{formatDate}}</div>
                 <div>{{formatTime}}</div>
@@ -24,37 +22,54 @@
         </div>
         <div class="main-info">
             <div class="info-head">
-                <div class="info-head-wait">侯检患者</div>
+                <div class="info-head-wait">候检患者</div>
                 <div style="width: .02rem;"></div>
                 <div class="info-head-pass">过号患者</div>
                 <div style="width: .02rem;"></div>
                 <div class="info-head-pass">候诊患者</div>
             </div>
             <div class="info-item-con">
-                <patient-item :data="waitQueueList" bgcolor="#E0F0FD"></patient-item>
+                <patient-item :data="waitQueueList" bgcolor="#E0F0FD">
+                    <template v-slot:right="slotProps">
+                        <van-button icon="arrow" size="small" class="pass-to-callin-btn" round @click="withoutChecking(slotProps.item)"></van-button>
+                    </template>
+                </patient-item>
                 <div style="width: .02rem;"></div>
-                <patient-item :data="passQueueList" bgcolor="#D6EFF4"></patient-item>
+                <patient-item :data="passQueueList" bgcolor="#D6EFF4">
+                    <template v-slot:right="slotProps">
+                        <van-button icon="arrow" size="small" class="pass-to-callin-btn" round @click="passToCallin(slotProps.item)"></van-button>
+                    </template>
+                </patient-item>
                 <div style="width: .02rem;"></div>
                 <patient-item :data="inQueueList" bgcolor="#D6EFF4">
-                    <van-button icon="edit" size="small" style="vertical-align: middle;" round @click="showPopup"></van-button>
+                    <template v-slot:right="slotProps">
+                        <van-button icon="edit" size="small" class="pass-to-callin-btn" round @click="showPopup(slotProps.item)"></van-button>
+                    </template>
                 </patient-item>
             </div>
         </div>
         <div class="bottom-info">
-            <van-button type="primary" style="width: 100%;" size="large" @click="callNext">下一位</van-button>
+            <van-row gutter="10">
+                <van-col span="12">
+                    <van-button type="info" style="width: 100%;" size="large" @click="refresh" :disabled="refreshBtn.disabled" :loading="refreshBtn.loading" loading-text="正在刷新，请稍等">刷 新</van-button>
+                </van-col>
+                <van-col span="12">
+                    <van-button type="primary" style="width: 100%;" size="large" @click="callNext" :disabled="nextBtn.disabled" :loading="nextBtn.loading" loading-text="正在呼叫，请稍等">下一位</van-button>
+                </van-col>
+            </van-row>
         </div>
-        <van-popup v-model="showResult" position="bottom">
+        <van-popup v-model="showResult" position="bottom" @open="handleOpenResult">
             <van-row>
                 <van-col span="8">
                     <van-panel title="右眼结果">
                         <van-cell-group>
-                            <van-field required clearable label="远视力 (OD)" right-icon="arrow-down" readonly @click="handleShowPicker('odfar')" input-align="center" v-model="form.odfar"></van-field>
+                            <van-field required clearable label="远视力 (OD)" right-icon="arrow-down" readonly @click="handleShowPicker('scdOd')" input-align="center" v-model="form.scdOd"></van-field>
                             <van-field type="text" placeholder="远视力备注" v-model="form.odRemark"></van-field>
-                            <van-field required clearable label="近视力 (OD)" right-icon="arrow-down" readonly @click="handleShowPicker('odnear')" input-align="center" v-model="form.odnear"></van-field>
+                            <van-field required clearable label="近视力 (OD)" right-icon="arrow-down" readonly @click="handleShowPicker('scnOd')" input-align="center" v-model="form.scnOd"></van-field>
                             <van-field required clearable label="矫正 (OD)" right-icon="arrow-down" readonly @click="handleShowPicker('odCorrect')" input-align="center" v-model="form.odCorrect"></van-field>
-                            <van-cell title="眼压 (OD)">
+                            <van-cell title="眼压 (OD)" value-class="correct-os-width">
                                 <template slot>
-                                    <van-stepper v-model="form.odPressure" step="0.1" />
+                                    <van-stepper v-model="form.iopOd" step="0.1" />
                                 </template>
                             </van-cell>
                         </van-cell-group>
@@ -63,13 +78,13 @@
                 <van-col span="8">
                     <van-panel title="左眼结果">
                         <van-cell-group>
-                            <van-field required clearable label="远视力 (OS)" right-icon="arrow-down" readonly @click="handleShowPicker('osfar')" input-align="center" v-model="form.osfar"></van-field>
+                            <van-field required clearable label="远视力 (OS)" right-icon="arrow-down" readonly @click="handleShowPicker('scdOs')" input-align="center" v-model="form.scdOs"></van-field>
                             <van-field type="text" placeholder="远视力备注" v-model="form.osRemark"></van-field>
-                            <van-field required clearable label="近视力 (OS)" right-icon="arrow-down" readonly @click="handleShowPicker('osnear')" input-align="center" v-model="form.osnear"></van-field>
+                            <van-field required clearable label="近视力 (OS)" right-icon="arrow-down" readonly @click="handleShowPicker('scnOs')" input-align="center" v-model="form.scnOs"></van-field>
                             <van-field required clearable label="矫正 (OS)" right-icon="arrow-down" readonly @click="handleShowPicker('osCorrect')" input-align="center" v-model="form.osCorrect"></van-field>
-                            <van-cell title="眼压 (OS)">
+                            <van-cell title="眼压 (OS)" value-class="correct-os-width">
                                 <template slot>
-                                    <van-stepper v-model="form.osPressure" step="0.1" />
+                                    <van-stepper v-model="form.iopOs" step="0.1" />
                                 </template>
                             </van-cell>
                         </van-cell-group>
@@ -87,11 +102,11 @@
                                         </van-row>
                                     </van-checkbox>
                                 </van-cell>
-                                <van-cell v-for="(item,index) in costList " clickable :key="item.itemId" value-class="override-van-checkbox__label" @click="toggle(index)">
-                                    <van-checkbox :name="item.itemId" ref="checkboxes" icon-size="24px">
+                                <van-cell v-for="(item,index) in costList " clickable :key="item.id" value-class="override-van-checkbox__label" @click="toggle(index)">
+                                    <van-checkbox :name="item.id" :key="item.id" ref="checkboxes" icon-size="24px">
                                         <van-row>
-                                            <van-col span="12" style="text-align: center;" class="fix-width">{{item.itemName}}</van-col>
-                                            <van-col span="12" style="text-align: center;" class="fix-width">{{item.fee}}</van-col>
+                                            <van-col span="12" style="text-align: center;" class="fix-width">{{item.payItemName}}</van-col>
+                                            <van-col span="12" style="text-align: center;" class="fix-width">{{item.price}}</van-col>
                                         </van-row>
                                     </van-checkbox>
                                 </van-cell>
@@ -110,43 +125,51 @@
                 </van-col>
             </van-row>
         </van-popup>
-        <van-popup v-model="showPicker" position="right" :style="{ height: '100%',width:'20%' }" >
-            <van-picker :columns="columns" show-toolbar @cancel="showPicker = false" @confirm="onConfirm" visible-item-count="15"></van-picker>
-        </van-popup>
-        <van-popup v-model="showBtn" :close-on-click-overlay="false" style="width: 40%;height: 25%;padding: .02rem;">
-            <div class="operate-title">{{operateTitle}}</div>
-            <div class="flex-center fs-04 white" style="height: 80%;">
-                <div class="flex-item-center h-100p bg-green mr-02" @click="handleCallin">就诊</div>
-                <div class="flex-item-center h-100p bg-blue mr-02" @click="handleRecall">重叫</div>
-                <div class="flex-item-center h-100p bg-yellow" @click="handlePass">过号</div>
-            </div>
-        </van-popup>
+        <#--<van-popup v-model="showPicker" position="right" :style="{ height: '100%',width:'20%' }">-->
+            <van-popup v-model="showPicker" position="bottom">
+                <van-picker :columns="columns" show-toolbar @cancel="showPicker = false" @confirm="onConfirm" visible-item-count="10"></van-picker>
+            </van-popup>
+            <van-popup v-model="showBtn" :close-on-click-overlay="false" style="width: 40%;height: 25%;padding: .02rem;">
+                <div class="operate-title">{{operateTitle}}</div>
+                <div class="flex-center fs-04 white" style="height: 80%;">
+                    <div class="flex-item-center h-100p bg-green mr-02">
+                        <van-button style="width: 100%;height: 100%;" size="large" type="primary" :disabled="callInBtn.disabled" :loading="callInBtn.loading" loading-text="正在操作，请稍等" @click="handleCallin">检查</van-button>
+                    </div>
+                    <div class="flex-item-center h-100p bg-blue mr-02">
+                        <van-button style="width: 100%;height: 100%;" size="large" type="info" :disabled="reCallBtn.disabled" :loading="reCallBtn.loading" loading-text="正在操作，请稍等" @click="handleRecall">重叫</van-button>
+                    </div>
+                    <div class="flex-item-center h-100p bg-yellow">
+                        <van-button style="width: 100%;height: 100%;" size="large" type="warning" :disabled="passBtn.disabled" :loading="passBtn.loading" loading-text="正在操作，请稍等" @click="handlePass">过号</van-button>
+                    </div>
+                </div>
+            </van-popup>
     </div>
 </body>
-<script src="./lib/polyfill.min.js"></script>
-<script src="./lib/mock-min.js"></script>
-<script src="./lib/axios.min.js"></script>
-<script src="./lib/moment.min.js"></script>
-<script src="./lib//zh-cn.js"></script>
-<script src="./lib/vue.min.js"></script>
-<script src="./lib/vant.min.js"></script>
-<script src="./js/padCall.min.js"></script>
-<script type="text/javascript">
-! function(e, t) {
-    function n() { t.body ? t.body.style.fontSize = 12 * o + "px" : t.addEventListener("DOMContentLoaded", n) }
+    <script src="${base}/static/lib/polyfill.min.js"></script>
+    <script src="${base}/static/lib/lodash.min.js"></script>
+    <script src="${base}/static/lib/mock-min.js"></script>
+    <script src="${base}/static/lib/axios.min.js"></script>
+    <script src="${base}/static/lib/moment.min.js"></script>
+    <script src="${base}/static/lib/zh-cn.js"></script>
+    <script src="${base}/static/lib/vue.min.js"></script>
+    <script src="${base}/static/lib/vant.min.js"></script>
+    <script src="${base}/static/js/app/padCall.min.js"></script>
+    <script type="text/javascript">
+    ! function(e, t) {
+        function n() { t.body ? t.body.style.fontSize = 12 * o + "px" : t.addEventListener("DOMContentLoaded", n) }
 
-    function d() {
-        var e = i.clientWidth / 10;
-        i.style.fontSize = e + "px"
-    }
-    var i = t.documentElement,
-        o = e.devicePixelRatio || 1;
-    if (n(), d(), e.addEventListener("resize", d), e.addEventListener("pageshow", function(e) { e.persisted && d() }), o >= 2) {
-        var a = t.createElement("body"),
-            s = t.createElement("div");
-        s.style.border = ".5px solid transparent", a.appendChild(s), i.appendChild(a), 1 === s.offsetHeight && i.classList.add("hairlines"), i.removeChild(a)
-    }
-}(window, document);
-</script>
+        function d() {
+            var e = i.clientWidth / 10;
+            i.style.fontSize = e + "px"
+        }
+        var i = t.documentElement,
+            o = e.devicePixelRatio || 1;
+        if (n(), d(), e.addEventListener("resize", d), e.addEventListener("pageshow", function(e) { e.persisted && d() }), o >= 2) {
+            var a = t.createElement("body"),
+                s = t.createElement("div");
+            s.style.border = ".5px solid transparent", a.appendChild(s), i.appendChild(a), 1 === s.offsetHeight && i.classList.add("hairlines"), i.removeChild(a)
+        }
+    }(window, document);
+    </script>
 
 </html>

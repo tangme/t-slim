@@ -8,6 +8,9 @@ body,
     margin: 0;
     height: 100%;
 }
+.correct-os-width{
+    min-width: 120px;
+}
 
 /* 顶部样式 */
 .top-head {
@@ -65,7 +68,7 @@ body,
 }
 
 .info-item-con {
-    height: 100%;
+    height: calc(100% - .6rem);
 }
 
 .info-head {
@@ -129,7 +132,7 @@ body,
     font-size: .4rem;
 }
 .mr-02{
-    margin-right: .02rem; 
+    margin-right: .02rem;
 }
 
 .operate-title{
@@ -163,6 +166,8 @@ body,
     flex-grow: 1;
     flex-shrink: 0;
     text-align: center;
+    width: 1rem;
+    overflow-y: auto;
 }
 .cell-height{
     height: .5rem;
@@ -181,6 +186,14 @@ body,
 .bg-container>div.showItem {
     /*height: .4rem;
     line-height: .4rem;*/
+    position: relative;
+}
+.pass-to-callin-btn{
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    min-width: auto;
 }
 
 .bg-container>div.showItem:not(:last-child) {
@@ -217,5 +230,5 @@ body,
 }
 
 .fix-width{
-    width: 1.2rem;
+    /*width: 1.2rem;*/
 }
