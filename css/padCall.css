@@ -8,11 +8,45 @@ body,
     margin: 0;
     height: 100%;
 }
-.correct-os-width{
-    min-width: 120px;
-}
 
-/* 顶部样式 */
+/* -----------覆盖vant ui 原有样式-------------start*/
+.override-van-collapse-item__content .van-collapse-item__content{
+    padding: 0;
+}
+/*.correct-os-width{*/
+    /*min-width: 120px;*/
+/*}*/
+/* 调整眼压 */
+.correct-press-width{
+    min-width: 250px;
+}
+.correct-press-width .van-cell.van-field{
+    padding: 0;
+}
+/* 调整光定位 */
+.correct-lightposition-width{
+    min-width: 250px;
+    overflow: visible;
+}
+.correct-lightposition-width .van-cell.van-field{
+    padding: 0;
+}
+/* 调整色觉 */
+.correct-colourvision-width{
+    min-width: 250px;
+    overflow: visible;
+}
+.correct-colourvision-width .van-cell.van-field{
+    padding: 0;
+}
+/* 折叠头 加粗 */
+.my-collapse-extends{
+    font-weight: bold;
+}
+/* -----------覆盖vant ui 原有样式-------------end*/
+
+
+/* --------------顶部样式----------------- */
 .top-head {
     display: flex;
     align-items: center;
@@ -24,11 +58,21 @@ body,
 }
 
 .top-head-logo {
-    flex-grow: 1;
-    flex-shrink: 0;
+    position: relative;
+    flex-grow: 0;
+    flex-shrink: 1;
     text-align: center;
     text-align: left;
-    text-indent: .2rem;
+    text-indent: .1rem;
+    height: 100%;
+    width: 3.5rem;
+}
+.top-head-logo-img{
+    position: relative;
+    height: auto;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .top-head-title {
@@ -52,7 +96,7 @@ body,
     margin: .05rem 0;
 }
 
-/* 中部内容 */
+/* ----------------中部内容------------------- */
 .main-info {
     padding: .15rem .15rem 0;
     box-sizing: border-box;
@@ -113,8 +157,14 @@ body,
     flex-grow: 1;
     flex-shrink: 0;
 }
+.textAlignCenter{
+    text-align: center;
+}
 .h-100p{
     height: 100%;
+}
+.w-100p{
+    width: 100%;
 }
 .white{
     color: #ffffff;
@@ -134,16 +184,21 @@ body,
 .mr-02{
     margin-right: .02rem;
 }
+.mr-06{
+    margin-right: .06rem;
+}
 
 .operate-title{
     display: flex;
     align-items: center;
-    height: 20%;
-    font-size: .2rem;
-    text-indent: .2rem;
+    justify-content: center;
+    height: 50%;
+    font-size: .35rem;
+    padding: .04rem 0;
+    /*text-indent: .2rem;*/
 }
 
-/*底部样式*/
+/*----------------底部样式-------------*/
 .bottom-info {
     margin: 0 .15rem;
     padding-top: 1%;
@@ -206,7 +261,7 @@ body,
 }
 .bg-container .showItem-span-left{
     float: left;
-    width: 50%;
+    width: 45%;
     text-align: right;
 }
 .bg-container .showItem-span-left:after{
@@ -216,7 +271,7 @@ body,
 }
 .bg-container .showItem-span-right{
     float: left;
-    width: 50%;
+    width: 55%;
     text-align: left;
 }
 
@@ -231,4 +286,43 @@ body,
 
 .fix-width{
     /*width: 1.2rem;*/
+}
+
+/* ------光定位组件 样式------ */
+.light-position-container{
+    position: relative;
+    overflow:visible;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items:center;
+    width:200px;
+    height: 200px;
+}
+.light-position-always-close-btn{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-100%,-50%);
+}
+.light-icon-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
+}
+
+/* ------色觉组件 样式------ */
+
+/* ------眼压组件 样式------ */
+
+/* 候检、过号、已检未录、已检已录 列表组件 样式 */
+.patient-column-surface{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
 }

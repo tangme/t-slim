@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>test</title>
-    <link rel="stylesheet" href="./css/outPatientQueue.min.css">
+    <link rel="stylesheet" href="./css/outPatientQueue.css">
 </head>
 
 <body>
     <div id="app" v-cloak>
         <div class="top-head">
-            <div class="top-head-logo">爱尔logo</div>
+            <div class="top-head-logo">logo</div>
             <div class="top-head-title">2楼屈光叫号屏</div>
             <div class="top-head-datearea">
                 <div>{{formatDate}}</div>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="main-container">
-            <panel-info v-for="item in dataList" :data="item.waiterList" :title="item.roomName" ></panel-info>
+            <panel-info v-for="item in dataList" :data="item.waitingQue" :call="item.callQue" :title="item.queueName" ></panel-info>
         </div>
         <div class="bottom-footer">
             温馨提示：请未叫到号码的患者在候诊区耐心等待，谢谢！
@@ -33,7 +33,7 @@
 <script src="./lib/moment.min.js"></script>
 <script src="./lib//zh-cn.js"></script>
 <script src="./lib/vue.min.js"></script>
-<script src="./js/outPatientQueue.min.js"></script>
+<script src="./js/outPatientQueue.js"></script>
 
 <script type="text/javascript">
 ! function(e, t) {
