@@ -29,7 +29,6 @@ var knownOptions = buildOptions({
     },
     onlychange: { //只针对改动文件执行任务
         type: "boolean",
-        alias: "oc",
         default: true
     },
     //语法校验
@@ -148,7 +147,7 @@ function doFlow(options) {
 
 exports.default = function(data) {
     return new Promise((resolve) => {
-        var { compress, resource, onlychange } = data;
+        var { compress, resource, onlychange ,lint} = data;
         var task = [];
         resource.includes('css') && task.push('autoprefixer');
         resource.includes('javascript') && task.push('js');
@@ -158,6 +157,7 @@ exports.default = function(data) {
         })
         options.env = compress ? 'production' : ''
         options.onlychange = onlychange;
+        options.lint = lint;
         console.log(options)
         gulp.series(task)()
     });

@@ -28,7 +28,7 @@ function queryResource() {
             ],
             filter: function(val) {
                 var result = [];
-                val.forEach(item=>{
+                val.forEach(item => {
                     result.push(item.toLowerCase());
                 });
                 return result;
@@ -62,7 +62,7 @@ function queryCompress() {
                 '否',
             ],
             filter: function(val) {
-                return val==='是'?true:false;
+                return val === '是' ? true : false;
             },
         }, ])
         .then((answers) => {
@@ -71,7 +71,7 @@ function queryCompress() {
         });
 }
 
-function queryOnlyChange(){
+function queryOnlyChange() {
     return inquirer
         .prompt([{
             type: 'list',
@@ -82,7 +82,31 @@ function queryOnlyChange(){
                 '否',
             ],
             filter: function(val) {
-                return val==='是'?true:false;
+                return val === '是' ? true : false;
+            },
+        }, ])
+        .then((answers) => {
+            // console.log(JSON.stringify(answers, null, '  '));
+            return Promise.resolve(answers)
+        });
+}
+/**
+ * [queryLint 询问是否校验]
+ * @Author tanglv   2020-09-29
+ * @return {[type]} [description]
+ */
+function queryLint() {
+    return inquirer
+        .prompt([{
+            type: 'list',
+            name: 'lint',
+            message: '是否校验语法规则?',
+            choices: [
+                '是',
+                '否',
+            ],
+            filter: function(val) {
+                return val === '是' ? true : false;
             },
         }, ])
         .then((answers) => {
@@ -91,13 +115,12 @@ function queryOnlyChange(){
         });
 }
 
-
 async function flow() {
-    Object.assign(options, await queryResource())
-    Object.assign(options, await queryCompress())
-    Object.assign(options, await queryOnlyChange())
+    Object.assign(options, await queryResource()) //资源类型
+    Object.assign(options, await queryCompress()) //压缩
+    Object.assign(options, await queryOnlyChange()) //仅修改
+    Object.assign(options, await queryLint()) //校验
 
-    console.log(options);
     return Promise.resolve(options);
 }
 
@@ -117,9 +140,39 @@ async function flow() {
 const t = require('./gulp.js')
 /*console.log(t.default);
 t.default()*/
-flow().then((data) => {
+/*flow().then((data) => {
     return t.default(data);
-}).then(data=>{
+}).then(data => {
     console.log('====')
     console.log(data)
+});*/
+
+
+
+/*console.log(__dirname)
+const path = require('path');
+
+console.log(process.cwd());
+console.log(path.resolve('./'));
+console.log(process.execPath)*/
+
+const os = require('os');
+const fs = require('fs');
+const path = require('path')
+
+var c = {name:'tanglv'}
+c = JSON.stringify(c)
+fs.access(path.join(os.homedir(), '.tanglv'), (err) => {
+    console.log(`.tanglv ${err ? 'does not exist' : 'exists'}`);
+    if (err) {
+        fs.mkdirSync(path.join(os.homedir(), '.tanglv'))
+        fs.writeFile(path.join(os.homedir(), '.tanglv/config.json'), c, function(err) {
+            if (err) {
+                console.log('There has been an error saving your configuration data.');
+                console.log(err.message);
+                return;
+            }
+            console.log('Configuration saved successfully.')
+        });
+    }
 });
