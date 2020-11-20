@@ -1,5 +1,5 @@
 {
-  "name": "gulp-template",
+  "name": "t-slim",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "author": "tanglv",
   "license": "MIT",
   "bin": {
-    "fit": "./cli/index.js"
+    "t-slim": "bin/t-slim.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
