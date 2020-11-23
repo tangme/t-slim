@@ -12,6 +12,7 @@ const path = require('path');
 
 const inquirer = require('inquirer'); //交互
 const mincss = require("../lib/cssModule");
+const minjs = require('../lib/jsModule')
 
 /**
  * 是否仅处理当前文件
@@ -70,7 +71,8 @@ async function flow () {
 
 flow().then(options => {
   console.log(options)
-  mincss(options);
+    mincss(options);
+    minjs(options)
 });
 
 
