@@ -1,0 +1,12 @@
+# 忽略目录
+js/
+css/
+ 
+# 忽略指定文件
+.browserslistrc
+.eslintrc.js
+.prettierrc.js
+babel.config.js
+vue.config.js
+*.map
+.editorconfig.js
