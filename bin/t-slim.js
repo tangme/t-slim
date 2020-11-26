@@ -79,7 +79,10 @@ program
   .option("-y, --yes", "all setting by default")
   .option("-s, --sub-folder", "processes current,sub,descendants directory")
   .option("-c, --cover", "overwrite the original")
-  .option("-f, --files [letters...]", "specify files to be processed");
+  .option(
+    "-f, --files [letters...]",
+    "specify files to be processed;multiple file names separated by spaces"
+  );
 
 program.parse(process.argv);
 
@@ -102,30 +105,39 @@ function processArgv(program) {
   if (program.files) {
     program.files.forEach((item) => {
       if (path.isAbsolute(item)) {
-        console.log("---");
-        console.log(path.extname(item).replace(/\./g, ""));
-        console.log("===");
-        if ("jscss".indexOf(path.extname(item).replace(/./g, ""))) {
-          console.log("符合要求.");
+        let { ext } = path.parse(item);
+        let extIndex = isValidExt(ext.replace(/\./g, "").toLowerCase());
+        if (extIndex === 0) {
+          js_files.push(item);
+        } else if (extIndex === 1) {
+          css_files.push(item);
+        } else {
+          console.log(`${item} is not js or css file.`);
         }
       } else {
-        let { root, dir, ext } = path.parse(item);
+        let { root, dir, base, ext } = path.parse(item);
         if (!root && !dir) {
           //指定当前文件
           let extIndex = isValidExt(ext.replace(/\./g, "").toLowerCase());
           if (extIndex === 0) {
             js_files.push(path.resolve(process.cwd(), item));
-            /* minjs({
-              cover: false,
-              fileName: path.resolve(process.cwd(), item),
-            }); */
           } else if (extIndex === 1) {
             css_files.push(path.resolve(process.cwd(), item));
           } else {
             console.log(`${item} is not js or css file.`);
           }
         } else {
-          //相对路径文件
+          //指定相对路径文件
+          console.log("相对路劲文件了...");
+          console.log(`root: ${root}  dir: ${dir}`);
+          let extIndex = isValidExt(ext.replace(/\./g, "").toLowerCase());
+          if (extIndex === 0) {
+            js_files.push(path.resolve(process.cwd(), dir, base));
+          } else if (extIndex === 1) {
+            css_files.push(path.resolve(process.cwd(), dir, base));
+          } else {
+            console.log(`${item} is not js or css file.`);
+          }
         }
       }
     });
@@ -175,18 +187,22 @@ function findFunNameIndex(arr, name) {
 }
 
 function exec(options) {
+  console.log(JSON.stringify(options));
+  let allTask = true;
   if (options.js_files.length) {
     options.fileName = options.js_files;
     delete options.js_files;
     minjs(options);
+    allTask = false;
   }
   if (options.css_files.length) {
     options.fileName = options.css_files;
     delete options.css_files;
     mincss(options);
+    allTask = false;
   }
 
-  if (!options.js_files.length && !options.css_files.length) {
+  if (allTask) {
     delete options.js_files;
     delete options.css_files;
     mincss(options);
