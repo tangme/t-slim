@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 const path = require("path");
+const fs = require("fs");
 
 //console.log("process.cwd: "+process.cwd());//return current working directory
 //console.log("path.resolve: "+path.resolve('./'));//return current working directory
@@ -82,6 +83,10 @@ program
   .option(
     "-f, --files [letters...]",
     "specify files to be processed;multiple file names separated by spaces"
+  )
+  .option(
+    "-d, --dir <type>",
+    "specify directory to be processed;single directory support only"
   );
 
 program.parse(process.argv);
@@ -102,6 +107,45 @@ function processArgv(program) {
 
   var css_files = [],
     js_files = [];
+
+  if (program.dir) {
+    console.log("处理路径了");
+    let tmpDir = path.resolve(process.cwd(), program.dir);
+    fs.promises
+      .access(tmpDir, fs.constants.F_OK)
+      .then(() => {
+        if (program.subFolder) {
+          let index = findFunNameIndex(ASK_ARR, "qCurDir");
+          index > -1 && ASK_ARR.splice(index, 1);
+          options.curdir = false;
+        }
+        if (program.cover) {
+          let index = findFunNameIndex(ASK_ARR, "qCover");
+          index > -1 && ASK_ARR.splice(index, 1);
+          options.cover = true;
+        }
+        if (program.yes) {
+          ASK_ARR = [];
+        }
+
+        if (ASK_ARR.length) {
+          // 提示询问
+          showAskFace().then((data) => {
+            Object.keys(data).forEach((key) => {
+              options[key] = data[key];
+            });
+            console.log("ask:" + JSON.stringify(data));
+            console.log("options" + JSON.stringify(options));
+            exec(Object.assign(options, { speDir: tmpDir }));
+          });
+        } else {
+          exec(Object.assign(options, { speDir: tmpDir }));
+        }
+      })
+      .catch(() => console.error(`${tmpDir} cannot access`));
+    return;
+  }
+
   if (program.files) {
     program.files.forEach((item) => {
       if (path.isAbsolute(item)) {
@@ -141,6 +185,10 @@ function processArgv(program) {
         }
       }
     });
+  }
+
+  if (program.files && !css_files.length && !js_files.length) {
+    return;
   }
 
   if (program.subFolder || css_files.length || js_files.length) {
@@ -189,13 +237,13 @@ function findFunNameIndex(arr, name) {
 function exec(options) {
   console.log(JSON.stringify(options));
   let allTask = true;
-  if (options.js_files.length) {
+  if (options.js_files && options.js_files.length) {
     options.fileName = options.js_files;
     delete options.js_files;
     minjs(options);
     allTask = false;
   }
-  if (options.css_files.length) {
+  if (options.css_files && options.css_files.length) {
     options.fileName = options.css_files;
     delete options.css_files;
     mincss(options);
