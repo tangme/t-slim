@@ -11,8 +11,8 @@ const fs = require("fs");
 //console.log("__filename"+ __filename)//The file name of the current module.
 
 const inquirer = require("inquirer"); //交互
-const mincss = require("../lib/cssModule");
-const minjs = require("../lib/jsModule");
+const mincss = require("../lib/cssModule"); //处理 css 文件模块
+const minjs = require("../lib/jsModule"); //处理 js 文件模块
 
 /**
  * 是否仅处理当前文件
@@ -220,6 +220,9 @@ function processArgv(program) {
   }
 }
 
+/**
+ * 启动命令行提示 参数选项
+ */
 async function showAskFace() {
   let askResult = {};
   for (let x of ASK_ARR) {
@@ -228,12 +231,21 @@ async function showAskFace() {
   return Promise.resolve(askResult);
 }
 
+/**
+ * 查询任务名称 下标索引
+ * @param {*} arr
+ * @param {*} name
+ */
 function findFunNameIndex(arr, name) {
   return arr.findIndex((item) => {
     return item.name === name;
   });
 }
 
+/**
+ * 执行任务
+ * @param {*} options
+ */
 function exec(options) {
   console.log(JSON.stringify(options));
   let allTask = true;
