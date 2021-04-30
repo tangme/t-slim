@@ -80,6 +80,7 @@ program
   .option("-y, --yes", "all setting by default")
   .option("-s, --sub-folder", "processes current,sub,descendants directory")
   .option("-c, --cover", "overwrite the original")
+  .option("-z, --zip", "compression of processed files")
   .option(
     "-f, --files [letters...]",
     "specify files to be processed;multiple file names separated by spaces"
@@ -107,6 +108,8 @@ function processArgv(program) {
 
   var css_files = [],
     js_files = [];
+
+  program.zip && (options.zip = true);
 
   if (program.dir) {
     console.log("处理路径了");
